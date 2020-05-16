@@ -48,6 +48,10 @@ var BrewSchema = new mongoose.Schema({
       note1: String,
       note2: String,
       note3: String
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
   }
 });
 

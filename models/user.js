@@ -9,17 +9,29 @@ var UserSchema = new mongoose.Schema({
   coffees: [
     {
     // each coffee
-      {
+      id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Coffee"
       },
     // array of brews of each coffee
       brews: [
         {
-          type: mongoose.Schema.Types.ObjectId;
+          type: mongoose.Schema.Types.ObjectId,
           ref: "brew"
         }
       ]
+    }
+  ],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+  interestedIn: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Coffee"
     }
   ]
 });

@@ -12,7 +12,7 @@ var RoasterSchema = new mongoose.Schema({
     countr: String
   },
 //   Website (preferred): website of the company
-  website: Strings,
+  website: String,
 //   Coffees[]: all coffees linked to the roaster
   coffees: [
     {

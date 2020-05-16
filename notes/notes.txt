@@ -1,0 +1,161 @@
+body-parser:
+bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended:true});
+req.body.WHATEVER
+
+express-sanitizer:
+//removes bad input such as script tags
+expressSanitizer = require("express-sanitizer");
+app.use(expressSanitizer()); //MUST BE USED AFTER BODY PARSER IS USED
+req.body.THING.TO.CLEAN = req.sanitize(req.body.THING.TO.CLEAN);
+Mongo:
+"show dbs" shows the available dbs in mongo
+"use *db*" switches current db in use to *db*
+"show collections" lists collections in the db
+"db.collection.find({})" shows item
+"db.collection.drop()" destroys everything in a collection
+
+mongoose:
+
+deprecation fixes:
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.set('useFindAndModify', false);
+
+// use deleteOne or deleteMany in place of remove()
+
+mongoose.connect("mongodb://ADDRESSS/APPNAME");
+
+var newScema = new mongoose.Schema({
+	var: Type,
+	var: Type,
+	var: Type
+	var: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: ""
+	}
+}
+
+//to render items that are by id...
+Model.findById(Id).populate("VariableToPopulate").exec(callback(err,returnedData));
+
+var Entry = mongoose.model("Entry Name(in singular form)", newSchema);
+
+Entry.find({"parameterToSubmit":"value"},callback(err,returnedEntry));
+Entry.create({ObjectToSubmit},callback(err,returnedEntry));
+Entry.findById(req.params.id,callback(err,returnedEntry));
+
+
+REST:
+maps between HTTP routes and CRUD
+
+Create	/newBlogPost
+Read	/allBlogs
+Update  /updateBlog/:id
+Destroy /destroyBlog/:id
+
+Name      Path            HTTP Verb       Purpose                                        Mongoose method
+-------+---------------+--------------+-------------------------------------------------+------------------------
+Index  | /dogs         |  GET         | list all dogs                                   |Dogs.find()
+New    | /dogs/new     |  GET         | show new dog form                               |none
+Create | /dogs         |  POST        | Create a new dog, then redirect somewhere       |Dog.create();
+Show   | /dogs/:id     |  GET         | Show info about one specific dog                |Dog.findById()
+Edit   | /dogs/:id/edit|  GET         | Show edit for for one dog                       |Dog.findById()
+Update | /dogs/:id     |  PUT         | Update a particular dog, then redirect somewhere|Dog.findByIdAndUpdate()
+Destroy| /dogs/:id     |  DELETE      | Delete a particular dog, then redirect somewhere|Dog.findByIdAndRemove()
+
+method-override:
+	methodOverride = require("method-override")
+	app.use(methodOverride("_method"))
+	form action="/ROUTE/:IDVAL/?_method=PUT"
+
+
+Express Router:
+app.js
+	const Route1 = require("./routes/route1"),
+	      Route2 = require("./routes/route2"),
+	      etc...
+
+	app.use(Route1);
+	app.use("/prepended/routes", Route2);
+
+
+route1.js
+	const express = require("express");
+	const router = express.Router();
+
+	// OR to bring in the value of req.body.params
+	const router = express.Router({mergeParams:true});
+
+	//require any models needed
+	const Model = require("../models/model");
+
+	// all routes are defined off router
+	router.get("/route",middleWare, (req,res) =>{
+		.....
+	});
+
+	module.exports = router;
+
+Authentication:
+user.js:
+	req mongoose, passport-local-mongoose
+	userSchema.plugin(passportLocalMongoose);
+
+app.js
+	req express, mongoose, passport, body-parser, passport-local, passport-local-mongoose
+	app=express();
+	app.use(require("express-session")({
+		secret: "String of words to encrypt & decrypt sessions",
+		resave: false,
+		saveUninitialized: false
+	}));
+	app.use(passport.initialize());
+	app.use(passport.session());
+
+	passport.serializeUser(User.serializeUser());
+	passport.deserializeUser(User.deserializeUser());
+
+	//TO USE THE USER IN EVER PAGE (E.G. CHECKING THE NAV BAR
+	app.use((req,res,next)=>{
+		res.locals.currentUser = req.user;
+		next();
+	});
+
+register logic:
+	registers a new user with a username to store, hashing the password but not storing it. then authenticates the new user, and takes them to secret userland
+	app.post("/register", (req,res)->{
+		User.register(new User({username:req.body.username}), req.body.password, (err, user)=>{
+			if(err){...} blah blah blah
+			passport.authenticate("local")(req,res,()=>{
+				res.redirect("/SOME/WHERE/");
+			});
+		});
+	});
+login logic:
+	// runs passport.authenticate as middleware and redirects if the login is correct or wrong
+	app.post("/login",passport.authenticate("local", {
+		successRedirect: "/Secret/User/Place",
+		failureRedirect: "/login"
+	}), (req,res)=>{
+	});
+
+secret place when logged in logic:
+	//define middleware auth check
+	function isLoggedIn(req,res,next) {
+		if(req.isAuthenticated()) {
+			// continue to the route callback funtion...
+			return next();
+		}
+		res.redirect("/login");
+	}
+
+	app.get("/secret", isLoggedIn, (req,res)=>{
+		res.render("secret");
+	});
+
+Authorization:
+	queriedObject.author.id //is a mongoose object
+	req.user._id            //is a string
+	// for validating ownership
+	if (queriedObject.author.id.equals(req.user._id))

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 // Coffee:
 var CoffeeSchema = new mongoose.Schema({
 //   Name (required): name of the coffee
-  name: Strings,
+  name: String,
 //   Roaster (required): who roasted the coffee
   roaster: {
     type: mongoose.Schema.Types.ObjectId,
@@ -47,7 +47,9 @@ var CoffeeSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     }
-  }
+  },
+  // count of users who have brewed this coffee
+  userCount: String
 });
 
 module.exports = mongoose.model("Coffee", CoffeeSchema);
