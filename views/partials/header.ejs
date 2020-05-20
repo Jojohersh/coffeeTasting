@@ -8,3 +8,25 @@
     <div class="header">
       header...
     </div>
+    <% if (errors && errors.length > 0) {%>
+      <% errors.forEach((error)=> { %>
+        <div class="flashError">
+          <strong><%=error%></strong>
+        </div>
+      <% }); %>
+    <%}%>
+    <% if (success && success.length > 0) {%>
+      <% success.forEach((message)=> { %>
+        <div class="flashSuccess">
+          <strong><%=message%></strong>
+        </div>
+      <% }); %>
+    <%}%>
+    <div class="nav">
+      <% if (currentUser) {%>
+        <p>hello <%=currentUser.username%></p>
+      <%} else {%>
+        <a href="/register">register</a>
+        <a href="/login">login</a>
+      <%}%>
+    </div>
