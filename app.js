@@ -23,6 +23,9 @@ const Coffee = require('./models/coffee');
 const Roaster = require('./models/roaster');
 // require routes
 const indexRoutes = require('./routes/index');
+const userRoutes = require('./routes/user');
+
+
 //setup mongoose
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
@@ -55,6 +58,7 @@ app.use((req,res,next)=>{
 });
 // connect routes
 app.use(indexRoutes);
+app.use("/user", userRoutes);
 
 app.listen(process.env.PORT, ()=>{
   console.log(`Server running on port:${process.env.PORT}`);

@@ -31,7 +31,7 @@ router.post("/register", signupValidationRules(), validate, checkAvailability("e
     passport.authenticate("local")(req,res,()=>{
       console.log("passport.authenticate running...");
       req.flash("success",`Thank you for registering ${newUser.username}`);
-      res.redirect("/");
+      res.redirect(`/user/${newUser.username}`);
     });
   });
 });
@@ -43,19 +43,19 @@ router.get("/login", (req,res)=>{
 router.post("/login",
             passport.authenticate("local",
             {
-              successRedirect:"/",
-              successFlash: `successfully logged in`,
               failureRedirect:"/login",
               failureFlash: "Login failed"
             }),
             (req,res)=>{
+              req.flash("success","successfully logged in");
+              res.redirect(`/user/${req.user.username}`);
 });
 
 //LOGOUT
 router.get("/logout",(req,res)=>{
   req.logout();
   req.flash("success", "successfully logged out");
-  res.redirect("/");
+  res.redirect("back");
 });
 
 module.exports = router;

@@ -8,6 +8,13 @@ const signupValidationRules = () => {
     body('password').not().isEmpty().withMessage("Hmmm, I thought I recalled making password required...").isLength({min: 8}).withMessage("Password must be at least 8 characters long")
   ]
 }
+
+//validation rules for creating a coffee
+const coffeeValidationRules = () => {
+  
+}
+
+
 // middleware validates against previously called rules
 const validate = (req,res,next) => {
   const result = validationResult(req);

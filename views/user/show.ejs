@@ -1,0 +1,21 @@
+<%-include("../partials/header")%>
+<h1><%=profile.username%></h1>
+<% if (currentUser && (profile.username === currentUser.username)) { %>
+<div class="container">
+    <h2>friends list</h2>
+    <ul>
+    <% currentUser.friends.forEach( (friend)=> { %>
+      <li><%=friend.username%></li>
+    <% }); %>
+  </ul>
+</div>
+<div class="container">
+  <h2>Coffees</h2>
+  <ul>
+    <% currentUser.coffees.forEach( (coffee)=> { %>
+      <li><%=coffee.name%></li>
+    <% }); %>
+  </ul>
+</div>
+<% } %>
+<%-include("../partials/footer")%>
