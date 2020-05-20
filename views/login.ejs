@@ -1,3 +1,11 @@
 <%-include("./partials/header")%>
-  <h1>login</h1>
+<div class="container">
+ <h1>Login</h1>
+
+ <form class="" action="/login" method="post">
+   <input type="text" name="username" value="" placeholder="username" required>
+   <input type="password" name="password" value="" placeholder="password" minlength="8" required>
+   <button>Register</button>
+ </form>
+</div>
 <%-include("./partials/footer")%>

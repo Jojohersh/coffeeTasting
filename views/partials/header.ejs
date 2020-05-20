@@ -25,6 +25,7 @@
     <div class="nav">
       <% if (currentUser) {%>
         <p>hello <%=currentUser.username%></p>
+        <a href="/logout">logout</a>
       <%} else {%>
         <a href="/register">register</a>
         <a href="/login">login</a>
