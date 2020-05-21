@@ -36,8 +36,6 @@ var CoffeeSchema = new mongoose.Schema({
 //     Process:
     process: String
   },
-//   Roast Date:
-  roastDate: String,
 //   Online store link:
   coffeeUrl: String,
 //   added by (required): which user added the coffee

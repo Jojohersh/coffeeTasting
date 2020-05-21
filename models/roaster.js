@@ -9,7 +9,8 @@ var RoasterSchema = new mongoose.Schema({
     address: String,
     city: String,
     state: String,
-    countr: String
+    country: String,
+    zipcode: String
   },
 //   Website (preferred): website of the company
   website: String,

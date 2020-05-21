@@ -32,6 +32,8 @@ var BrewSchema = new mongoose.Schema({
     time: String,
 //  grind size: grind size purely in relation to user
     grind: String,
+//   Roast Date:
+    roastDate: String,
 //  measured TDS: tds of coffee
     tds: String,
 //  equipment

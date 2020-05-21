@@ -9,13 +9,13 @@
     <% }); %>
   </ul>
 </div>
+<% } %>
 <div class="container">
   <h2>Coffees</h2>
   <ul>
-    <% currentUser.coffees.forEach( (coffee)=> { %>
+    <% profile.coffees.forEach( (coffee)=> { %>
       <li><%=coffee.name%></li>
     <% }); %>
   </ul>
 </div>
-<% } %>
 <%-include("../partials/footer")%>

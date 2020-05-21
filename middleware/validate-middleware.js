@@ -11,25 +11,36 @@ const signupValidationRules = () => {
 
 //validation rules for creating a coffee
 const coffeeValidationRules = () => {
-  
+
 }
 
+// validation rules for creating a roaster
+const roasterValidationRules = () => {
+  return [
+    body("name").not().isEmpty().withMessage("Name is a required field").matches(/^(\w+\s?(\&\s)?)+([Cc]o\.?)?\s*$/).trim(),
+    body("location.address").not().isEmpty().matches(),
+  ]
+}
 
 // middleware validates against previously called rules
 const validate = (req,res,next) => {
   const result = validationResult(req);
+  console.log(result);
   if (result.isEmpty()) {
     return next();
   }
   var errorMessages = [];
-  for (var error in result.errors) {
-    errorMessages.push(error);
-  }
-  req.flash("error", result.errors);
+  result.errors.forEach((error) => {
+    // console.log(error);
+    errorMessages.push(error.param + ": " + error.msg);
+  });
+
+  req.flash("error", errorMessages);
   return res.status(400).redirect("back");
 }
 
 module.exports = {
+  roasterValidationRules,
   signupValidationRules,
   validate
 }

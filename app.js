@@ -22,8 +22,9 @@ const Brew = require('./models/brew');
 const Coffee = require('./models/coffee');
 const Roaster = require('./models/roaster');
 // require routes
-const indexRoutes = require('./routes/index');
 const userRoutes = require('./routes/user');
+const indexRoutes = require('./routes/index');
+const roasterRoutes = require('./routes/roaster');
 
 
 //setup mongoose
@@ -59,6 +60,7 @@ app.use((req,res,next)=>{
 // connect routes
 app.use(indexRoutes);
 app.use("/user", userRoutes);
+app.use("/roasters", roasterRoutes);
 
 app.listen(process.env.PORT, ()=>{
   console.log(`Server running on port:${process.env.PORT}`);
