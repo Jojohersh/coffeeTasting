@@ -1,0 +1,10 @@
+<%- include('../partials/header')%>
+<% roasters.forEach( (roaster) => { %>
+  <div class="entry">
+    <a href="/roasters/<%=roaster._id%>">
+      <h1><%= roaster.name%></h1>
+      <a href="<%= roaster.website%>">Website</a>
+    </a>
+  </div>
+<% }) %>
+<%- include('../partials/footer')%>

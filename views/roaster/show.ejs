@@ -1,0 +1,21 @@
+<%- include('../partials/header')%>
+  <div class="">
+    <a href="/roasters">Back to all roasters</a>
+    <a href="<%= roaster.website%>"><h1><%= roaster.name %></h1>
+</a>
+
+    <div class="">
+      <p><strong>address</strong></p>
+      <p><%= roaster.location.address%> <%= roaster.location.city%>, <%=roaster.location.state%></p>
+      <p><%= roaster.location.country%>, <%= roaster.location.zipcode%></p>
+    </div>
+    <div class="">
+      <h2>Coffees</h2>
+      <% roaster.coffees.forEach((coffee)=>{ %>
+        <div class="coffee">
+          <%= coffee.name%>
+        </div>
+      <% });%>
+    </div>
+  </div>
+<%- include('../partials/footer')%>

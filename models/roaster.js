@@ -5,7 +5,7 @@ var RoasterSchema = new mongoose.Schema({
   //   Name (required): Name
   name: String,
   //   Location (required): where are they from
-  Location: {
+  location: {
     address: String,
     city: String,
     state: String,
