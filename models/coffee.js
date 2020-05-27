@@ -11,6 +11,7 @@ var CoffeeSchema = new mongoose.Schema({
 //   Blend Info:
   blendInfo: [
     {
+      _id: false,
       country: String,
       process: String
     }
@@ -28,11 +29,7 @@ var CoffeeSchema = new mongoose.Schema({
 //     Elevation:
     elevation: String,
 //     Varietals;
-    varietals: [
-      {
-        varietal: String
-      }
-    ],
+    varietals: [String],
 //     Process:
     process: String
   },
@@ -49,5 +46,26 @@ var CoffeeSchema = new mongoose.Schema({
   // count of users who have brewed this coffee
   userCount: String
 });
+
+CoffeeSchema.methods.extractBlend = function(blendInfo) {
+  // pull the coffees from the html req
+  for (let coffee of Object.entries(blendInfo)) {
+    // coffee[0] is just the parameter name, coffee[1] contains the actual data object
+    var coffeeInfo = coffee[1];
+    if (coffeeInfo.country.length > 0) {
+      //store coffees that exist
+      this.blendInfo.push(coffeeInfo);
+    }
+  }
+}
+
+CoffeeSchema.methods.extractVarietals = function(varietals) {
+  //separate the comma separated string of varietals
+  var varietalArray = varietals.split(/\s?\,\s?/);
+  // push to the Coffee varietal array
+  for (let varietal of varietalArray) {
+    this.singleOInfo.varietals.push(varietal);
+  }
+}
 
 module.exports = mongoose.model("Coffee", CoffeeSchema);

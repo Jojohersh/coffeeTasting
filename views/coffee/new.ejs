@@ -1,0 +1,44 @@
+<%-include('../partials/header')%>
+  <h1>New Coffee</h1>
+  <div class="">
+    <form class="" action="/coffees/new" method="post">
+        <p>Roaster</p>
+        <select class="" name="roaster">
+        <% if (roasters.length == 1){%>
+          <option value="<%=roasters[0]._id%>"><%=roasters[0].name%></option>
+        <% } else {%>
+            <% roasters.forEach((roaster)=>{%>
+              <option value="<%=roaster._id%>"><%=roaster.name%></option>
+            <% }); %>
+        <% }%>
+      </select>
+        <select class="" name="blendType">
+          <option value="blend">Blend</option>
+          <option value="single">Single Origin</option>
+        </select>
+        <input type="text" name="name" value="" placeholder="Coffee Name" required>
+        <div id="blendInfo">
+          <p>Blend Info</p>
+          <input type="text" name="blendInfo[coffee1][country]" value="" placeholder="Country">
+          <input type="text" name="blendInfo[coffee1][process]" value="" placeholder="process">
+          <input type="text" name="blendInfo[coffee2][country]" value="" placeholder="Country">
+          <input type="text" name="blendInfo[coffee2][process]" value="" placeholder="process">
+          <input type="text" name="blendInfo[coffee3][country]" value="" placeholder="Country">
+          <input type="text" name="blendInfo[coffee3][process]" value="" placeholder="process">
+        </div>
+        <div id="singleOInfo">
+          <p>Single Origin Info</p>
+          <input type="text" name="singleOInfo[country]" value="" placeholder="Country">
+          <input type="text" name="singleOInfo[region]" value="" placeholder="Region">
+          <input type="text" name="singleOInfo[farm]" value="" placeholder="Farm">
+          <input type="text" name="singleOInfo[elevation]" value="" placeholder="Elevation (MASL)">
+          <input type="text" name="singleOInfo[varietals]" value="" placeholder="Varietals (comma separated)">
+          <input type="text" name="singleOInfo[process]" value="" placeholder="Processing method">
+        </div>
+        <div>
+          <input type="text" name="coffeeUrl" value="" placeholder="Online Store Link">
+        </div>
+        <button>Submit</button>
+    </form>
+  </div>
+<%-include('../partials/footer')%>

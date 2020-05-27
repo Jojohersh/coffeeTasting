@@ -10,8 +10,48 @@ const signupValidationRules = () => {
 }
 
 //validation rules for creating a coffee
-const coffeeValidationRules = () => {
+const coffeeValidationRules = (req, res, next) => {
+  var namingPattern = /^[A-Za-z\s\-\,]*$/;
+  // specifies: letters+[max 1 space]+letters,[possible space]letters[max 1 space]letters
+  var varietalListPattern = /^[A-Za-z0-9\-]+\s?[A-Za-z0-9\-]+(\,\s?[A-Za-z0-9\-]+\s?[A-Za-z0-9\-]+)*$/;
 
+  return [
+    body('roaster').not().isEmpty().isMongoId(),
+    body('name').not().isEmpty().trim().escape(),
+    body('blendType').custom((value, {req})=>{
+      // console.log(req.body.singleOInfo);
+      if (req.body.blendType === "blend") {
+        if (req.body.blendInfo.coffee1.country.length < 1 && req.body.blendInfo.coffee2.country.length < 1) {
+          throw new Error("Blend coffee must be specified");
+        }
+        for (let [key, value] of Object.entries(req.body.singleOInfo)) {
+          req.body.singleOInfo[key] = "";
+        }
+        return true;
+      } else if (req.body.blendType === "single") {
+        if (req.body.singleOInfo.country.length < 1) {
+          throw new Error("Single Origin Country must be specified");
+        }
+        for (let [key, value] of Object.entries(req.body.blendInfo)) {
+          req.body.blendInfo[key].country = "";
+          req.body.blendInfo[key].process = "";
+        }
+        return true;
+      } else {
+        throw new Error("Coffee must be either a blend or single origin");
+      }
+    }),
+    body('blendInfo.*.*').optional().if(body('blendType').equals("blend")).matches(namingPattern).withMessage("Coffees and processes may only contain alphanumeric characters, spaces, and dashes").trim().escape(),
+    // body('coffee2.country').if(body('blendType').equals("blend")).matches(namingPattern).trim().escape(),
+
+    body('singleOInfo.country').if(body('blendType').equals("single")).matches(namingPattern).trim().escape(),
+    body('singleOInfo.region').if(body('blendType').equals("single")).optional().matches(namingPattern).trim().escape(),
+    body('singleOInfo.farm').if(body('blendType').equals("single")).optional().matches(namingPattern).trim().escape(),
+    body('singleOInfo.elevation').if(body('blendType').equals("single")).optional().matches(/^([0-9]{4}(\-[0-9]{4})?)?$/).withMessage("Elevation must be 4 digits or a range (e.g. 1400-1900)"),
+    body('singleOInfo.varietals').if(body('blendType').equals("single")).if(body('singleOInfo.varietals').not().isEmpty()).matches(varietalListPattern).withMessage("Varietals must be comma separated. Each Varietal may contain letters, numbers, a dash, and at most 1 space").trim().escape(),
+    body('singleOInfo.process').if(body('blendType').equals("single")).optional().matches(namingPattern).trim().escape(),
+    body('coffeeUrl').if(body('coffeeUrl').not().isEmpty()).isURL().trim(),
+  ]
 }
 
 // validation rules for creating a roaster
@@ -29,9 +69,9 @@ const roasterValidationRules = () => {
         return true;
       }
     }),
-    body("location.country").not().isEmpty().withMessage("Country is a required field").isLocale(),
-    body("location.zipcode").not().isEmpty().withMessage("Zipcode is a required field").isPostalCode('US'),
-    body("website").not().isEmpty().withMessage("Website is a required field").isURL(),
+    body("location.country").not().isEmpty().withMessage("Country is a required field").isLocale().trim(),
+    body("location.zipcode").not().isEmpty().withMessage("Zipcode is a required field").isPostalCode('US').trim(),
+    body("website").not().isEmpty().withMessage("Website is a required field").isURL().trim(),
   ]
 }
 
@@ -52,6 +92,7 @@ const validate = (req,res,next) => {
 }
 
 module.exports = {
+  coffeeValidationRules,
   roasterValidationRules,
   signupValidationRules,
   validate
