@@ -58,9 +58,19 @@ router.post("/new", coffeeValidationRules(), validate, (req,res)=>{
                 req.flash("error", "Something went wrong creating your coffee");
                 res.redirect("back");
               } else {
-                res.status(201);
-                req.flash("success", "successfully created coffee");
-                res.redirect("/coffees/" + createdCoffee._id);
+                Roaster.findById(createdCoffee.roaster, (err, foundRoaster) => {
+                  if (err) {
+                    res.status(400);
+                    req.flash("error", "Error saving coffee to roaster");
+                    res.redirect("back");
+                  } else {
+                    foundRoaster.coffees.push(createdCoffee);
+                    foundRoaster.save();
+                    res.status(201);
+                    req.flash("success", "successfully created coffee");                    
+                    res.redirect("/coffees/" + createdCoffee._id);
+                  }
+                });
               }
             });
           }

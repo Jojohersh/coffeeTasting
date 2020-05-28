@@ -1,7 +1,7 @@
 <%- include('../partials/header')%>
   <div class="">
     <h1><%= coffee.name%></h1>
-    <h2><%= coffee.roaster.name%></h2>
+    <a href="/roasters/<%=coffee.roaster.id %>"><h2><%= coffee.roaster.name%></h2></a>
     <h3><%= coffee.blendType%></h3>
     <div class="">
       <% if (coffee.blendType === "blend") {%>

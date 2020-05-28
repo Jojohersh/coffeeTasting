@@ -13,7 +13,7 @@
       <h2>Coffees</h2>
       <% roaster.coffees.forEach((coffee)=>{ %>
         <div class="coffee">
-          <%= coffee.name%>
+          <a href="/coffees/<%= coffee._id %>"><%= coffee.name%></a>
         </div>
       <% });%>
     </div>

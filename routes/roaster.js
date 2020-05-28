@@ -60,7 +60,7 @@ router.post("/new",roasterValidationRules(), validate, (req,res)=>{
 
 //VIEW
 router.get("/:id", (req,res)=> {
-  Roaster.findById(req.params.id, (err, foundRoaster) =>{
+  Roaster.findById(req.params.id).populate("coffees").exec( (err, foundRoaster) =>{
     if (err) {
       res.status(400);
       req.flash("error", "something went wrong");
