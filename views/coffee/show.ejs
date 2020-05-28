@@ -1,6 +1,26 @@
 <%- include('../partials/header')%>
   <div class="">
     <h1><%= coffee.name%></h1>
-    <h2><%= coffee.roaster%></h2>
+    <h2><%= coffee.roaster.name%></h2>
+    <h3><%= coffee.blendType%></h3>
+    <div class="">
+      <% if (coffee.blendType === "blend") {%>
+        <ul>
+          <h3>Coffees in Blend</h3>
+          <li><p></p></li>
+        </ul>
+      <% } else if (coffee.blendType === "single") { %>
+        <% var keys = Object.keys(coffee.singleOInfo) %>
+        <% console.log(keys)%>
+        <% console.log(coffee.singleOInfo.varietals)%>
+        <% keys.forEach( (key) => { %>
+          <% if (key === "varietals" && coffee.singleOInfo.varietals.length > 0) { %>
+            <p><%=key.toUpperCase()%>: <%= coffee.singleOInfo.varietals.join(", ") %>
+          <%} else if (key !== "$init" && coffee.singleOInfo[key].length > 0) { %>
+            <p><%= key.toUpperCase()%>: <%= coffee.singleOInfo[key]%></p>
+          <%}%>
+        <% }); %>
+      <% } %>
+    </div>
   </div>
 <%- include('../partials/footer')%>

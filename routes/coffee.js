@@ -25,7 +25,8 @@ router.post("/new", coffeeValidationRules(), validate, (req,res)=>{
   var info = {
     name: req.body.name,
     roaster: req.body.roaster,
-    coffeeUrl: req.body.coffeeUrl
+    coffeeUrl: req.body.coffeeUrl,
+    blendType: req.body.blendType
   }
   var newCoffee = new Coffee(info);
 
@@ -44,15 +45,38 @@ router.post("/new", coffeeValidationRules(), validate, (req,res)=>{
     req.flash("error", "Error with blend type definition.");
     res.redirect("/");
   }
-  Coffee.create(newCoffee, (err, createdCoffee) =>{
+  Coffee.exists({name:newCoffee.name, roaster: newCoffee.roaster})
+        .then( (coffeeExists) => {
+          if (coffeeExists) {
+            res.status(400);
+            req.flash("error", "Coffee already exists");
+            res.redirect("back");
+          } else {
+            Coffee.create(newCoffee, (err, createdCoffee) =>{
+              if (err) {
+                res.status(400);
+                req.flash("error", "Something went wrong creating your coffee");
+                res.redirect("back");
+              } else {
+                res.status(201);
+                req.flash("success", "successfully created coffee");
+                res.redirect("/coffees/" + createdCoffee._id);
+              }
+            });
+          }
+        }
+  );
+});
+
+router.get("/:id", (req,res)=>{
+  Coffee.findById(req.params.id).populate("roaster").exec( (err, foundCoffee) =>{
     if (err) {
       res.status(400);
-      req.flash("error", "Something went wrong creating your coffee");
+      req.flash("error", "error finding coffee");
       res.redirect("back");
     } else {
-      res.status(201);
-      req.flash("success", "successfully created coffee");
-      res.redirect("/coffees/" + createdCoffee._id);
+      res.status(200);
+      res.render("coffee/show", {coffee: foundCoffee});
     }
   });
 });
