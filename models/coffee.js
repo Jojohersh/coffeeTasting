@@ -66,7 +66,9 @@ CoffeeSchema.methods.extractVarietals = function(varietals) {
   var varietalArray = varietals.split(/\s?\,\s?/);
   // push to the Coffee varietal array
   for (let varietal of varietalArray) {
-    this.singleOInfo.varietals.push(varietal);
+    if (varietal.length > 0) {
+      this.singleOInfo.varietals.push(varietal);
+    }
   }
 }
 

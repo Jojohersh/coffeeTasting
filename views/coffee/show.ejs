@@ -11,8 +11,6 @@
         </ul>
       <% } else if (coffee.blendType === "single") { %>
         <% var keys = Object.keys(coffee.singleOInfo) %>
-        <% console.log(keys)%>
-        <% console.log(coffee.singleOInfo.varietals)%>
         <% keys.forEach( (key) => { %>
           <% if (key === "varietals" && coffee.singleOInfo.varietals.length > 0) { %>
             <p><%=key.toUpperCase()%>: <%= coffee.singleOInfo.varietals.join(", ") %>
