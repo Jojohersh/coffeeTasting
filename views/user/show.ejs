@@ -1,5 +1,5 @@
-<%-include("../partials/header")%>
-<h1><%=profile.username%></h1>
+<%- include("../partials/header") %>
+<h1><%= profile.username %></h1>
 <% if (currentUser && (profile.username === currentUser.username)) { %>
 <div class="container">
     <h2>friends list</h2>
@@ -13,9 +13,32 @@
 <div class="container">
   <h2>Coffees</h2>
   <ul>
-    <% profile.coffees.forEach( (coffee)=> { %>
-      <li><%=coffee.name%></li>
+  <% //************************************************************************ %>
+    <% profile.coffees.forEach( (entry)=> { %>
+      <div class="entry">
+        <h3><%= entry.coffee.name%></h3>
+        <% if (entry.coffee.blendType === "blend") {%>
+          <ul>
+            <h3>Coffees in Blend</h3>
+              <% for (let blendCoffee of entry.coffee.blendInfo) {%>
+                <li><%= blendCoffee.process += " "%><%= blendCoffee.country%></li>
+              <%}%>
+          </ul>
+        <% } else if (entry.coffee.blendType === "single") { %>
+          <% var keys = Object.keys(entry.coffee.singleOInfo) %>
+      <% // *********************************************************%>
+          <% keys.forEach( (key) => { %>
+            <% if (key === "varietals" && entry.coffee.singleOInfo.varietals.length > 0) { %>
+              <p><%=key.toUpperCase()%>: <%= entry.coffee.singleOInfo.varietals.join(", ") %>
+            <%} else if (key !== "$init" && entry.coffee.singleOInfo[key].length > 0) { %>
+              <p><%= key.toUpperCase()%>: <%= entry.coffee.singleOInfo[key]%></p>
+            <%}%>
+          <% }); %>
+      <% // *** end keys.foreach *********************************** %>
+        <% } %>
+        <a href="/brew/new/<%=entry.coffee._id%>"><button>Brew this coffee</button></a>
+      </div>
     <% }); %>
-  </ul>
+  <% // *********************************************************************** %>
 </div>
-<%-include("../partials/footer")%>
+<%- include("../partials/footer") %>

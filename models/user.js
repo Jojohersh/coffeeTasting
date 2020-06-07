@@ -8,8 +8,9 @@ var UserSchema = new mongoose.Schema({
   // list of coffees user has logged
   coffees: [
     {
+      _id: false,
     // each coffee
-      id: {
+      coffee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Coffee"
       },

@@ -52,6 +52,7 @@ router.post("/new", coffeeValidationRules(), validate, (req,res)=>{
             req.flash("error", "Coffee already exists");
             res.redirect("back");
           } else {
+            newCoffee.addedBy = {name: req.user.username, id: req.user._id};
             Coffee.create(newCoffee, (err, createdCoffee) =>{
               if (err) {
                 res.status(400);
@@ -67,7 +68,7 @@ router.post("/new", coffeeValidationRules(), validate, (req,res)=>{
                     foundRoaster.coffees.push(createdCoffee);
                     foundRoaster.save();
                     res.status(201);
-                    req.flash("success", "successfully created coffee");                    
+                    req.flash("success", "successfully created coffee");
                     res.redirect("/coffees/" + createdCoffee._id);
                   }
                 });
@@ -89,6 +90,54 @@ router.get("/:id", (req,res)=>{
       res.render("coffee/show", {coffee: foundCoffee});
     }
   });
+});
+
+router.post("/:id/addToUser", (req,res) =>{
+  if (!req.user) {
+    res.status(403);
+    req.flash("error", "Permission denied");
+    res.redirect("back");
+  } else {
+    // retrieve the current user
+    User.findById(req.user._id, (err, foundUser) =>{
+      if (err) {
+        res.status(400);
+        req.flash("error", "Error retrieving user");
+        console.log(err);
+        res.redirect("back");
+      } else {
+        // retrieve the coffee
+        Coffee.findById(req.params.id, (err, foundCoffee) =>{
+          if (err) {
+            res.status(400);
+            req.flash("error", "Error retrieving coffee");
+            res.redirect("back");
+          // check if the coffee exists
+          } else if (!foundCoffee) {
+            res.status(404);
+            req.flash("error", "Coffee not found");
+            res.redirect("back");
+          // check if the user already has the coffee saved
+          } else {
+            for (let entry of foundUser.coffees) {
+              console.log(entry);
+              // if (coffee._id.equals(req.params.id)) {
+              //   res.status(400);
+              //   req.flash("error", "Coffee already saved");
+              //   return res.redirect("back");
+              // }
+            }
+            foundUser.coffees.push({coffee:foundCoffee});
+            // console.log(foundUser.coffees);
+            foundUser.save();
+            res.status(200);
+            req.flash("success", "Successfully added coffee to account");
+            res.redirect("back");
+          }
+        });
+      }
+    });
+  }
 });
 
 module.exports = router;

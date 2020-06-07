@@ -16,6 +16,9 @@
           <a href="/coffees/<%= coffee._id %>"><%= coffee.name%></a>
         </div>
       <% });%>
+      <% if (currentUser) { %>
+        <a href="/coffees/new">Add New</a>
+      <% } %>
     </div>
   </div>
 <%- include('../partials/footer')%>

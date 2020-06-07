@@ -15,7 +15,7 @@ router.get("/", (req,res)=>{
 
 router.get("/:username", (req,res)=>{
   var userToFind = req.params.username;
-  User.findOne({username:userToFind}, (err,foundUser)=>{
+  User.findOne({username:userToFind}).populate("coffees.coffee").exec( (err,foundUser)=>{
     if (err) {
       res.status(400);
       req.flash("error", err);

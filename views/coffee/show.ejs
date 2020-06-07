@@ -7,7 +7,9 @@
       <% if (coffee.blendType === "blend") {%>
         <ul>
           <h3>Coffees in Blend</h3>
-          <li><p></p></li>
+            <% for (let blendCoffee of coffee.blendInfo) {%>
+              <li><%= blendCoffee.process += " "%><%= blendCoffee.country%></li>
+            <%}%>
         </ul>
       <% } else if (coffee.blendType === "single") { %>
         <% var keys = Object.keys(coffee.singleOInfo) %>
@@ -20,5 +22,8 @@
         <% }); %>
       <% } %>
     </div>
+    <form class="" action="/coffees/<%=coffee._id%>/addToUser" method="post">
+      <input type="submit" name="submit" value="Save to Account">
+    </form>
   </div>
 <%- include('../partials/footer')%>
